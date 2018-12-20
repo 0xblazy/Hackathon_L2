@@ -41,10 +41,25 @@ public class Arbre2{
        return(this.fg.VIDE() && this.fd.VIDE()); // a utiliser uniquement si on est sur que l'arbre n'est pas vide
    }
 
+   // Correspond au sous algo AffichageMembre(a) => ICI a est l'objet Arbre2 qui appelle la méthode
    public String toString() {		
-		if (!this.VIDE())
-			return this.r + " -- " +  this.FD() + "\n|\n" + this.FG();
-		else
-			return "";
+	   Arbre2 arbreTemp = new Arbre2();
+	   String s = "";
+	   if (this.RACINE() != null) s += this.RACINE() + " :";
+	   arbreTemp = this.FG();
+	   while(arbreTemp != null) {
+		   if(arbreTemp.RACINE() != null) {
+			   s += " -" + arbreTemp.RACINE();
+		   } else {
+			   s += "\n";
+		   }
+		   arbreTemp = arbreTemp.FD();
+	   }
+	   arbreTemp = this.FG();
+	   while(arbreTemp != null) {
+		   if(arbreTemp.RACINE() != null) s += arbreTemp;			   
+		   arbreTemp = arbreTemp.FD();
+	   }
+	   return s;
 	}
 } // fin classe
