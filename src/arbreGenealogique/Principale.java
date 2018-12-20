@@ -1,6 +1,9 @@
 package arbreGenealogique;
 
 public class Principale{
+	
+	private Arbre2 arbreUltime;
+	
     public static void main(String[] args){
 		//variables locales
 		Arbre2 a, a2,a3;
@@ -9,9 +12,8 @@ public class Principale{
 		Principale p = new Principale();
 	
 		a = new Arbre2();
-		Arbre2 arbreUltime = new Arbre2(); // crée un arbre vide
+		p.arbreUltime = new Arbre2(); // crée un arbre vide
 	
-		// MOI
 		Personne p1 = new Personne("ant", "ben", new Date(15, 9, 1998), "commune", false, new Conjoint[0], true, "info");
 		Personne p2 = new Personne("aqsdnt", "besqdn", new Date(15, 2, 1998), "commune", false, new Conjoint[0], true, "info");
 		Personne p3 = new Personne("ant", "ben", new Date(15, 9, 843), "commune", false, new Conjoint[0], true, "info");
@@ -19,35 +21,16 @@ public class Principale{
 		
 		Conjoint c = new Conjoint("ok", "zkj", new Date(20,3,1836), false);
 		
-		arbreUltime = p.creationArbre(p1);
-		p.ajoutConjoint(c, arbreUltime, p1);
-		// COMPOSER(personne_a_ajouter, fils, frere)
+		p.arbreUltime = p.creationArbre(p1);
+		p.ajoutConjoint(c, p.arbreUltime, p1);
 		
-		/*System.out.println(a.VIDE()); //affiche true
-		a.COMPOSER(p1,new Arbre2(),new Arbre2());
-		System.out.println(a.VIDE()); //affiche  false
-		System.out.println(a.RACINE()); // affiche 12
-		afg=new Arbre2();
-		afd=new Arbre2();
-		afg.COMPOSER(p1,new Arbre2(),new Arbre2());
-		afd.COMPOSER(p1,new Arbre2(),new Arbre2());
-		a2=new Arbre2();
-		a2.COMPOSER(a.RACINE(),afg,afd);
-		System.out.println(a2.RACINE().getNom()); // affiche 12
-		System.out.println(a2.FG().RACINE()); // affiche 14
-		a3=a2.FG();
-		System.out.println(a3.RACINE()); // affiche 14
-		if(a3.FG().VIDE())
-		    System.out.println("a3 fils g vide");
-		else
-		    System.out.println(a3.FG().RACINE());
-		// affiche "a3 fils g vide"
-		System.out.println(a3.FEUILLE()); // affiche true
-		
-		
-		boolean test = new Date(15, 9, 1998).equals(new Date(15,9,1998));
-		
-		System.out.println("TEST " + test);*/
+		p.ajoutEnfant(p2, p1, p.arbreUltime);
+		System.out.println(p.arbreUltime);
+		p.ajoutEnfant(p3, p1, p.arbreUltime);
+		System.out.println(p.arbreUltime);
+		p.ajoutEnfant(p4, p2, p.arbreUltime);
+		//System.out.println();
+		System.out.println(p.arbreUltime);
     } // fin main
     
     // SSALGO #1 CreationArbre(ancetre_ultime)
@@ -93,6 +76,57 @@ public class Principale{
     }
     
     // SSALGO #3 AjoutEnfant(enfant, parent, arbre)
+    private void ajoutEnfant(Personne enfant, Personne parent, Arbre2 a) {
+		Arbre2 fils, arbreTemp;
+		
+		if (!a.VIDE()) {
+			//System.out.println(this.arbreUltime.RACINE().getNom());
+			//System.out.println(personneEgal(this.arbreUltime.RACINE(), parent));
+			if (personneEgal(a.RACINE(), parent)) {
+				fils = new Arbre2();
+				fils.COMPOSER(enfant, new Arbre2(), a.FG());
+				//this.arbreUltime = ajouterEnfantDroite(arbreUltime, enfant, parent);
+				a.COMPOSER(a.RACINE(), fils, a.FD());
+			} else {
+				arbreTemp = new Arbre2();
+				arbreTemp = a.FG();
+				ajoutEnfant(enfant, parent, arbreTemp);
+				a.COMPOSER(a.RACINE(), arbreTemp, a.FD());
+				arbreTemp = a.FD();
+				ajoutEnfant(enfant, parent, arbreTemp);
+				a.COMPOSER(a.RACINE(), a.FG(), arbreTemp);
+			}
+		}
+	}
+    
+    // SSALGO #4 RechercheExistence(pers, arbre)
+    private boolean RechercheExistence(Arbre2 arbre, Personne p1){
+        if (arbre.VIDE()){
+            return false;
+        } else {
+            if(arbre.RACINE().getPrenom().equals(p1.getPrenom()) && arbre.RACINE().getNom().equals(p1.getNom())){
+                return true;
+            } else {
+                if(this.RechercheExistence(arbre.FG(),p1)) {
+                	return true;
+                } else {
+                	return this.RechercheExistence(arbre.FD(), p1);
+                }
+            }
+        }
+    }
+    
+    // SSALGO #5 RechercheVivants(arbre, tab, i)
+    private void RechercheVivants(Arbre2 arbre, Personne[] tab, int i){
+        if (!arbre.VIDE()){
+            if (!arbre.RACINE().isMort()){
+                tab[i]=arbre.RACINE();
+                i++;
+            }
+            RechercheVivants(arbre.FD(),tab,i);
+            RechercheVivants(arbre.FG(),tab,i);
+        }
+    }
 	
 	// SSALGO AffichageMembre(a)
 	private void affichageMembre(Arbre2 a) {
@@ -119,7 +153,7 @@ public class Principale{
 	
 	// SSALGO PersonneEgale(p1,p2)
 	private boolean personneEgal(Personne racine, Personne pers) {
-		return (racine.getPrenom().equals(pers.getPrenom()) && racine.getNom().equals(pers.getNom()) && racine.getDateNaissance().equals(pers.getDateNaissance()));
+		return (racine.getPrenom().equals(pers.getPrenom()) && racine.getNom().equals(pers.getNom()) && this.dateEgale(racine.getDateNaissance(), pers.getDateNaissance()));
 	}
 	
 	// SSALGO FilsDroit(arbre)
