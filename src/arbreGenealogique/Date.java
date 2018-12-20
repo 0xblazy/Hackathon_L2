@@ -35,11 +35,4 @@ public class Date {
 	public void setAnnee(int annee) {
 		this.annee = annee;
 	}
-	
-	// DateEgale dans les sous algos
-	public boolean equals(Date date) {
-		return (this.getJour() == date.getJour() && this.getMois() == date.getMois() && this.getAnnee() == date.getAnnee());
-		
-	}
-
 }

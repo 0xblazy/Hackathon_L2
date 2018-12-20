@@ -39,6 +39,11 @@ public class Personne {
 		this.setHomme(homme);
 		this.setProfession(profession);
 	}
+	
+	// Correspond au sous algo AffichagePersonne(pers) => ICI pers est l'objet Personne qui appelle la méthode
+	public String toString() {
+		return this.nom + " " + this.prenom;
+	}
 
 	public String getPrenom() {
 		return prenom;

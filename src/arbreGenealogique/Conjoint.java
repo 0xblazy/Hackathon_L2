@@ -25,6 +25,11 @@ public class Conjoint {
 		this.setDivorce(divorce);
 	}
 	
+	// Correspond au sous algo AffichageConjoint(conjoint) => ICI conjoint est l'objet Conjoint qui appelle la méthode
+	public String toString() {
+		return this.nom + " " + this.prenom;
+	}
+	
 	public String getPrenom() {
 		return prenom;
 	}
