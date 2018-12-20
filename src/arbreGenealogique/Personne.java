@@ -1,7 +1,5 @@
 package arbreGenealogique;
 
-import java.util.Date;
-
 public class Personne {
 	
 	private String prenom;
@@ -29,7 +27,7 @@ public class Personne {
 		this.setHomme(homme);
 		this.setProfession(profession);
 	}
-	
+	 
 	// si la personne n'est pas morte
 	public Personne(String prenom, String nom, Date dateNaissance, String communeNaissance, boolean mort, Conjoint[] conjoint, boolean homme, String profession) {
 		this.setPrenom(prenom);

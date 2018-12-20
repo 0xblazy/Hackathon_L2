@@ -29,5 +29,8 @@ public class Principale{
 	System.out.println(a3.FEUILLE()); // affiche true
 	
 	
+	boolean test = new Date(15, 9, 1998).equals(new Date(15,9,1998));
+	
+	System.out.println("TEST " + test);
     } // fin main
 } // fin class
