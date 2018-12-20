@@ -41,4 +41,10 @@ public class Arbre2{
        return(this.fg.VIDE() && this.fd.VIDE()); // a utiliser uniquement si on est sur que l'arbre n'est pas vide
    }
 
+   public String toString() {		
+		if (!this.VIDE())
+			return this.r + " -- " +  this.FD() + "\n|\n" + this.FG();
+		else
+			return "";
+	}
 } // fin classe
